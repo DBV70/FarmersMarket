@@ -1,0 +1,13 @@
+{% extends 'shared/base.html' %}
+{% load crispy_forms_filters %}
+{% block content %}
+<div class="container">
+    <h2 class="mt-4">Add Producer</h2>
+    <form method="post" class="mt-4" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <a href="javascript:history.back()" class="btn btn-outline-secondary">← Back</a>
+        <button type="submit" class='btn btn-primary'>Add Producer</button>
+    </form>
+</div>
+{% endblock %}
