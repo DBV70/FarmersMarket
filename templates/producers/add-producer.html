@@ -1,13 +1,6 @@
 {% extends 'shared/base.html' %}
-{% load crispy_forms_filters %}
+{% block title %}Add Producer | Farmers Market{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2 class="mt-4">Add Producer</h2>
-    <form method="post" class="mt-4" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <a href="javascript:history.back()" class="btn btn-outline-secondary">← Back</a>
-        <button type="submit" class='btn btn-primary'>Add Producer</button>
-    </form>
-</div>
+{% include 'shared/form-card.html' with title="Add Producer" subtitle="Register a new farm or producer." icon="fa-tractor" submit_label="Add Producer" %}
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'shared/base.html' %}
+{% block title %}Delete Market Day | Farmers Market{% endblock %}
+
+{% block content %}
+<div class="fm-card fm-form-card fm-danger-card">
+    <div class="fm-form-head">
+        <h1 class="h3 mb-1"><i class="fa-solid fa-triangle-exclamation me-2"></i>Delete Market Day</h1>
+        <p class="mb-0">This action cannot be undone. The attending producers will not be deleted.</p>
+    </div>
+    <form method="post" class="fm-form-body">
+        {% csrf_token %}
+        <p class="fs-5 mb-2">Are you sure you want to delete the market day in <strong>{{ object.location }}</strong> on <strong>{{ object.date|date:"F d, Y" }}</strong>?</p>
+        <p class="text-muted mb-4">{{ object.get_market_type_display }} &middot; {{ object.producers.count }} producer{{ object.producers.count|pluralize }} attending</p>
+        <div class="d-flex justify-content-between gap-2">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+            <button class="btn btn-danger btn-lg" type="submit"><i class="fa-solid fa-trash me-1"></i> Delete</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

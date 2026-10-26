@@ -1,12 +1,6 @@
 {% extends 'shared/base.html' %}
+{% block title %}Update {{ object.name }} | Farmers Market{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2 class="mt-4">Update Producer</h2>
-    <form method="post" class="mt-4" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <a href="javascript:history.back()" class="btn btn-outline-secondary">← Back</a>
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-    </form>
-</div>
+{% include 'shared/form-card.html' with title="Update Producer" subtitle=object.name icon="fa-pen" submit_label="Save Changes" %}
 {% endblock %}

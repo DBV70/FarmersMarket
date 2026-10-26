@@ -1,0 +1,65 @@
+{% extends 'shared/base.html' %}
+{% block title %}Market Days | Farmers Market{% endblock %}
+
+{% block content %}
+<div class="fm-page-header">
+    <div>
+        <span class="fm-eyebrow">Schedule</span>
+        <h1 class="display-5">Market Days</h1>
+        <p class="lead text-muted mb-0">See where and when our producers sell</p>
+    </div>
+    <a href="{% url 'markets:add' %}" class="btn btn-primary btn-lg"><i class="fa-solid fa-plus me-1"></i> Add Market Day</a>
+</div>
+
+<form class="fm-search mb-4" method="get">
+    <div class="input-group input-group-lg">
+        <input type="text" class="form-control" placeholder="Search location..." name="search_text" value="{{ request.GET.search_text }}">
+        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</button>
+    </div>
+</form>
+
+{% if markets_list %}
+<div class="row g-4">
+    {% for market_day in marketday_list %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="fm-card fm-card-hover h-100 d-flex flex-column p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="fm-date-chip">
+                        <span class="day">{{ market_day.date|date:"d" }}</span>
+                        <span class="month">{{ market_day.date|date:"M" }}</span>
+                    </span>
+                    <div>
+                        <h2 class="h5 mb-1">{{ market_day.location }}</h2>
+                        <span class="fm-badge">{{ market_day.get_market_type_display }}</span>
+                    </div>
+                </div>
+
+                <p class="text-muted small mb-1"><i class="fa-regular fa-calendar me-1"></i>{{ market_day.date|date:"l, F d, Y" }}</p>
+                <p class="text-muted small mb-3"><i class="fa-regular fa-clock me-1"></i>{{ market_day.market_open|time:"H:i" }} &ndash; {{ market_day.market_close|time:"H:i" }}</p>
+                <p class="text-muted small mb-3">{{ market_day.description|truncatewords:20 }}</p>
+
+                <div class="mt-auto">
+                    <div class="mb-3">
+                        <span class="fm-badge fm-badge-amber"><i class="fa-solid fa-tractor"></i> {{ market_day.producers.all|length }} producer{{ market_day.producers.all|length|pluralize }}</span>
+                    </div>
+                    <a href="{% url 'markets:details' market_day.pk %}" class="btn btn-outline-primary w-100">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="fm-card fm-empty">
+    <i class="fa-regular fa-calendar mb-3"></i>
+    {% if request.GET.search_text %}
+        <h2 class="h4">No market days match "{{ request.GET.search_text }}"</h2>
+        <p class="text-muted mb-3">Try a different location.</p>
+        <a href="{% url 'markets:list' %}" class="btn btn-outline-primary">Clear search</a>
+    {% else %}
+        <h2 class="h4">No market days scheduled</h2>
+        <p class="text-muted mb-3">There are no market days yet. Schedule the first one!</p>
+        <a href="{% url 'markets:add' %}" class="btn btn-primary">Add Market Day</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

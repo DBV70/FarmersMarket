@@ -1,42 +1,42 @@
 {% extends 'shared/base.html' %}
-{% load static %}
-{% block content %}
+{% block title %}Producers | Farmers Market{% endblock %}
 
-<div class="mb-4">
-    <h1 class="display-4">All Producers</h1>
-    <p class="lead text-muted">Browse all registered producers</p>
-    <a href="{% url 'producers:add' %}" class="btn btn-primary">Add Producer</a>
+{% block content %}
+<div class="fm-page-header">
+    <div>
+        <span class="fm-eyebrow">Our growers</span>
+        <h1 class="display-5">All Producers</h1>
+        <p class="lead text-muted mb-0">Browse all registered producers</p>
+    </div>
+    <a href="{% url 'producers:add' %}" class="btn btn-primary btn-lg"><i class="fa-solid fa-plus me-1"></i> Add Producer</a>
 </div>
+
+<form class="fm-search mb-4" method="get">
+    <div class="input-group input-group-lg">
+        <input type="text" class="form-control" placeholder="Search name..." name="search_text" value="{{ request.GET.search_text }}">
+        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</button>
+    </div>
+</form>
 
 {% if producer_list %}
 <div class="row g-4">
-    <form>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search name..." name="search_text" value="{{ request.GET.search_text }}">
-            <button class="btn btn-outline-secondary" type="submit">Search</button>
-        </div>
-    </form>
-
     {% for producer in producer_list %}
-        <div class="col-md-6 col-lg-4">
-            <div class="top h-100 shadow-sm">
+        <div class="col-sm-6 col-lg-4">
+            <div class="fm-card fm-card-hover h-100 d-flex flex-column">
                 {% if producer.image %}
-                    <img src="{{ producer.image.url }}" class="card-img-top shadow" alt="...">
+                    <img src="{{ producer.image.url }}" class="fm-card-img" alt="{{ producer.name }}">
                 {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
-                        <span class="text-white fs-1">📖</span>
-                    </div>
+                    <div class="fm-card-placeholder"><i class="fa-solid fa-tractor"></i></div>
                 {% endif %}
 
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ producer.name }}</h5>
-                    <p class="text-muted small mb-2">
-                        <span class="text-muted">{{ producer.address }}, {{ producer.country }}</span>
-                    </p>
-                    <p class="text-muted small mb-2">
-                        <a href="{{ producer.website }}" target="_blank" rel="noopener noreferrer">{{ producer.website }}</a>
-                    </p>
-                    <p class="card-text text-truncate mb-3">{{ producer.description|truncatewords:20 }}</p>
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                        <h2 class="h5 mb-0">{{ producer.name }}</h2>
+                        <span class="fm-badge fm-badge-amber text-nowrap">{{ producer.products.all|length }} product{{ producer.products.all|length|pluralize }}</span>
+                    </div>
+                    <p class="text-muted small mb-1"><i class="fa-solid fa-location-dot me-1"></i>{{ producer.address }}, {{ producer.country.name }}</p>
+                    <p class="small mb-3 text-truncate"><i class="fa-solid fa-globe me-1 text-muted"></i><a href="{{ producer.website }}" target="_blank" rel="noopener noreferrer">{{ producer.website }}</a></p>
+                    <p class="text-muted small mb-3">{{ producer.description|truncatewords:20 }}</p>
                     <div class="mt-auto">
                         <a href="{% url 'producers:details' producer.pk %}" class="btn btn-outline-primary w-100">View Details</a>
                     </div>
@@ -46,9 +46,16 @@
     {% endfor %}
 </div>
 {% else %}
-<div class="alert alert-info">
-    <h4 class="alert-heading">No producers available</h4>
-    <p>There are currently no registered producers. Check back later!</p>
+<div class="fm-card fm-empty">
+    <i class="fa-solid fa-tractor mb-3"></i>
+    {% if request.GET.search_text %}
+        <h2 class="h4">No producers match "{{ request.GET.search_text }}"</h2>
+        <p class="text-muted mb-3">Try a different search term.</p>
+        <a href="{% url 'producers:list' %}" class="btn btn-outline-primary">Clear search</a>
+    {% else %}
+        <h2 class="h4">No producers available</h2>
+        <p class="text-muted mb-0">There are currently no registered producers. Check back later!</p>
+    {% endif %}
 </div>
 {% endif %}
 {% endblock %}

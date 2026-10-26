@@ -1,0 +1,6 @@
+{% extends 'shared/base.html' %}
+{% block title %}Update Market Day | Farmers Market{% endblock %}
+
+{% block content %}
+{% include 'shared/form-card.html' with title="Update Market Day" subtitle=object.location icon="fa-pen" submit_label="Save Changes" %}
+{% endblock %}
