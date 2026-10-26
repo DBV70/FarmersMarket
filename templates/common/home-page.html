@@ -1,0 +1,106 @@
+{% extends "shared/base.html" %}
+{% load static %}
+{% block title %}Home | Farmers Market{% endblock %}
+
+{% block content %}
+<section class="fm-hero mb-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+            <span class="fm-badge fm-badge-amber mb-3"><i class="fa-solid fa-leaf"></i> Fresh &amp; local</span>
+            <h1 class="display-4 mb-3">Welcome to Farmers Market</h1>
+            <p class="lead mb-4">Manage products, producers, and markets from one place. Explore our product catalog, view market days, and manage your inventory with ease.</p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{% url 'products:list' %}" class="btn btn-accent btn-lg"><i class="fa-solid fa-basket-shopping me-1"></i> Browse Products</a>
+                <a href="{% url 'producers:list' %}" class="btn btn-outline-light btn-lg"><i class="fa-solid fa-tractor me-1"></i> Meet the Producers</a>
+            </div>
+        </div>
+        <div class="col-lg-5 text-center">
+            <img src="{% static 'images/CFM Logo.png' %}" class="img-fluid fm-hero-logo" alt="Farmers Market logo">
+        </div>
+    </div>
+</section>
+
+<section class="row g-4 mb-5">
+    <div class="col-md-4">
+        <a href="{% url 'products:list' %}" class="fm-card fm-card-hover fm-stat">
+            <span class="fm-stat-icon"><i class="fa-solid fa-carrot"></i></span>
+            <span>
+                <span class="fm-stat-value d-block">{{ total_products }}</span>
+                <span class="fm-stat-label">Products</span>
+            </span>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'producers:list' %}" class="fm-card fm-card-hover fm-stat">
+            <span class="fm-stat-icon"><i class="fa-solid fa-tractor"></i></span>
+            <span>
+                <span class="fm-stat-value d-block">{{ total_producers }}</span>
+                <span class="fm-stat-label">Producers</span>
+            </span>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'markets:list' %}" class="fm-card fm-card-hover fm-stat">
+            <span class="fm-stat-icon amber"><i class="fa-regular fa-calendar"></i></span>
+            <span>
+                <span class="fm-stat-value d-block">{{ total_market_days }}</span>
+                <span class="fm-stat-label">Scheduled Market Days</span>
+            </span>
+        </a>
+    </div>
+</section>
+
+<section class="row g-4">
+    <div class="col-lg-7">
+        <div class="fm-card h-100">
+            <div class="d-flex justify-content-between align-items-center px-4 pt-4 pb-3">
+                <h2 class="h4 mb-0">Latest Products</h2>
+                <a href="{% url 'products:list' %}" class="small fw-semibold text-decoration-none">View all <i class="fa-solid fa-arrow-right ms-1"></i></a>
+            </div>
+            {% for product in latest_products %}
+                <a href="{% url 'products:details' product.pk %}" class="fm-list-item">
+                    <span class="d-flex align-items-center gap-3">
+                        <span class="fm-stat-icon"><i class="fa-solid fa-seedling"></i></span>
+                        <span>
+                            <strong class="d-block">{{ product.name }}</strong>
+                            <span class="small text-muted">{{ product.producer.name|default:"Unknown producer" }}</span>
+                        </span>
+                    </span>
+                    <span class="fm-price">${{ product.price }}</span>
+                </a>
+            {% empty %}
+                <div class="fm-empty">
+                    <i class="fa-solid fa-basket-shopping mb-3"></i>
+                    <p class="text-muted mb-3">No products available yet.</p>
+                    <a href="{% url 'products:add' %}" class="btn btn-primary btn-sm">Add the first product</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="fm-card h-100">
+            <div class="px-4 pt-4 pb-3">
+                <h2 class="h4 mb-0">Upcoming Market Days</h2>
+            </div>
+            {% for market_day in upcoming_market_days %}
+                <div class="fm-list-item justify-content-start">
+                    <span class="fm-date-chip">
+                        <span class="day">{{ market_day.date|date:"d" }}</span>
+                        <span class="month">{{ market_day.date|date:"M" }}</span>
+                    </span>
+                    <span>
+                        <strong class="d-block"><i class="fa-solid fa-location-dot me-1 text-muted"></i>{{ market_day.location }}</strong>
+                        <span class="small text-muted">{{ market_day.get_market_type_display }}</span>
+                    </span>
+                </div>
+            {% empty %}
+                <div class="fm-empty">
+                    <i class="fa-regular fa-calendar mb-3"></i>
+                    <p class="text-muted mb-0">No market days scheduled.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

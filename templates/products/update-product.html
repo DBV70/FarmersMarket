@@ -1,0 +1,6 @@
+{% extends 'shared/base.html' %}
+{% block title %}Update {{ object.name }} | Farmers Market{% endblock %}
+
+{% block content %}
+{% include 'shared/form-card.html' with title="Update Product" subtitle=object.name icon="fa-pen" submit_label="Save Changes" %}
+{% endblock %}

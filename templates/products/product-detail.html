@@ -1,0 +1,76 @@
+{% extends 'shared/base.html' %}
+{% block title %}{{ product.name }} | Farmers Market{% endblock %}
+
+{% block content %}
+<a href="{% url 'products:list' %}" class="d-inline-block mb-4 text-decoration-none fw-semibold"><i class="fa-solid fa-arrow-left me-1"></i> All products</a>
+
+<div class="row g-5">
+    <div class="col-lg-5">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="fm-detail-img" alt="{{ product.name }}">
+        {% else %}
+            <div class="fm-detail-img fm-card-placeholder"><i class="fa-solid fa-seedling"></i></div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-7">
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="fm-badge">{{ product.get_category_display }}</span>
+            {% if product.quantity > 0 %}
+                <span class="fm-badge fm-badge-amber"><i class="fa-solid fa-box"></i> {{ product.quantity }} {{ product.get_unit_display }} in stock</span>
+            {% else %}
+                <span class="fm-badge bg-danger-subtle text-danger-emphasis">Out of stock</span>
+            {% endif %}
+        </div>
+
+        <h1 class="display-5 mb-2">{{ product.name }}</h1>
+        <p class="fm-price fs-2 mb-4">${{ product.price }}</p>
+
+        <div class="fm-card p-4 mb-4">
+            <h2 class="h5 mb-2">About This Product</h2>
+            <p class="mb-0">{{ product.description|linebreaksbr }}</p>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+                <div class="fm-card fm-info">
+                    <p class="fm-info-label"><i class="fa-regular fa-calendar-plus me-1"></i> Registered</p>
+                    <p class="fm-info-value">{{ product.created_at|date:"F d, Y" }}</p>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="fm-card fm-info">
+                    <p class="fm-info-label"><i class="fa-regular fa-hourglass-half me-1"></i> Expires</p>
+                    <p class="fm-info-value">{{ product.expiry_date|date:"F d, Y"|default:"Not set" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="h5 mb-3">Producer</h2>
+        {% if product.producer %}
+            <a href="{% url 'producers:details' product.producer.pk %}" class="fm-card fm-card-hover fm-list-item mb-4">
+                <span class="d-flex align-items-center gap-3">
+                    <span class="fm-stat-icon"><i class="fa-solid fa-tractor"></i></span>
+                    <span>
+                        <strong class="d-block">{{ product.producer.name }}</strong>
+                        <span class="small text-muted">{{ product.producer.address }}, {{ product.producer.country.name }}</span>
+                    </span>
+                </span>
+                <i class="fa-solid fa-chevron-right text-muted"></i>
+            </a>
+        {% else %}
+            <p class="text-muted mb-4">No producer for this product yet.</p>
+        {% endif %}
+
+        <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-accent btn-lg"><i class="fa-solid fa-cart-plus me-1"></i> Add to Cart</button>
+            <a href="{% url 'products:edit' product.pk %}" class="btn btn-outline-primary btn-lg"><i class="fa-solid fa-pen me-1"></i> Update</a>
+            <a href="{% url 'products:delete' product.pk %}" class="btn btn-outline-danger btn-lg"><i class="fa-solid fa-trash me-1"></i> Delete</a>
+        </div>
+
+        {% if product.updated_at %}
+            <p class="text-muted small mt-4 mb-0">Last updated: {{ product.updated_at|date:"F d, Y, g:i a" }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

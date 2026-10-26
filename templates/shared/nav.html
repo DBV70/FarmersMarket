@@ -1,0 +1,39 @@
+{% load static %}
+{% with section=request.resolver_match.app_name %}
+<nav class="navbar navbar-expand-md navbar-dark fm-navbar sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'common:home' %}">
+            <img height="42" width="42" src="{% static 'images/market_5432814.png' %}" alt="Farmers Market">
+            Farmers Market
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto gap-1 mt-3 mt-md-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if section == 'common' %}active{% endif %}" href="{% url 'common:home' %}">
+                        <i class="fa-solid fa-house me-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if section == 'products' %}active{% endif %}" href="{% url 'products:list' %}">
+                        <i class="fa-solid fa-basket-shopping me-1"></i> Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if section == 'producers' %}active{% endif %}" href="{% url 'producers:list' %}">
+                        <i class="fa-solid fa-tractor me-1"></i> Producers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if section == 'markets' %}active{% endif %}" href="{% url 'markets:list' %}">
+                        <i class="fa-solid fa-basket-shopping me-1"></i> Markets
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endwith %}
