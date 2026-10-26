@@ -30,6 +30,18 @@ class ProductForm(forms.ModelForm):
             'expiry_date': 'Expiry Date:',
         }
 
+        help_texts = {
+            'name': 'Enter the name of the product.',
+            'price': 'Enter the price of the product.',
+            'quantity': 'Enter the quantity of the product.',
+            'image': 'Upload an image of the product.',
+            'description': 'Provide a detailed description of the product.',
+            'category': 'Select the category of the product.',
+            'unit': 'Select the unit of measurement.',
+            'producer': 'Select the producer of the product.',
+            'expiry_date': 'Enter the expiry date of the product.',
+        }
+
 class ProductCreateForm(ProductForm):
     pass
 
@@ -37,4 +49,11 @@ class ProductUpdateForm(ProductForm):
     pass
 
 class ProductDeleteForm(ProductForm):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['name'].disabled = True
+            self.fields['description'].disabled = True
+
+    class Meta(ProductForm.Meta):
+        exclude = ['price', 'quantity', 'category', 'unit', 'producer', 'expiry_date', 'image']

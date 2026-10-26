@@ -33,7 +33,7 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     unit = models.CharField(max_length=10, choices=UnitChoices.choices, default=UnitChoices.PCS)
     producer = models.ForeignKey(Producer, on_delete=models.CASCADE, related_name='products', blank=True, null=True)
-    image = models.ImageField(upload_to='media/products/', blank=True, null=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     expiry_date = models.DateField(blank=True, null=True)

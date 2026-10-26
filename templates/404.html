@@ -1,0 +1,23 @@
+{% extends 'shared/base.html' %}
+{% block title %}Page Not Found | Farmers Market{% endblock %}
+
+{% block content %}
+<section class="fm-hero mb-5 text-center">
+    <span class="fm-badge fm-badge-amber mb-3"><i class="fa-solid fa-seedling"></i> Error 404</span>
+    <h1 class="display-1 fw-bold mb-2">404</h1>
+    <h2 class="h3 mb-3">This field is empty</h2>
+    <p class="lead mb-4">The page you are looking for doesn't exist, was moved, or never sprouted.</p>
+    <a href="{% url 'common:home' %}" class="btn btn-accent btn-lg"><i class="fa-solid fa-house me-1"></i> Back to Home</a>
+</section>
+
+<section class="fm-card fm-empty">
+    <i class="fa-solid fa-signs-post mb-3"></i>
+    <h2 class="h4">Maybe you were looking for one of these?</h2>
+    <p class="text-muted mb-4">Pick up where you left off:</p>
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+        <a href="{% url 'products:list' %}" class="btn btn-outline-primary"><i class="fa-solid fa-basket-shopping me-1"></i> Products</a>
+        <a href="{% url 'producers:list' %}" class="btn btn-outline-primary"><i class="fa-solid fa-tractor me-1"></i> Producers</a>
+        <a href="{% url 'markets:list' %}" class="btn btn-outline-primary"><i class="fa-regular fa-calendar me-1"></i> Market Days</a>
+    </div>
+</section>
+{% endblock %}

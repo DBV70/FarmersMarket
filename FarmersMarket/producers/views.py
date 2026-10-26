@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
-from FarmersMarket.producers.forms import ProducerCreateForm, ProducerUpdateForm
+from FarmersMarket.producers.forms import ProducerCreateForm, ProducerUpdateForm, ProducerDeleteForm
 from FarmersMarket.producers.models import Producer
 from FarmersMarket.common.forms import SearchForm
 
@@ -19,7 +19,14 @@ class ProducerUpdateView(UpdateView):
 
 class ProducerDeleteView(DeleteView):
     model = Producer
+    form_class = ProducerDeleteForm
+    template_name = 'producers/producer_confirm_delete.html'
     success_url = reverse_lazy('producers:list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.get_object()
+        return kwargs
 
 
 class ProducerListView(ListView):

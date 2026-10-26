@@ -1,182 +1,90 @@
 # Farmers Market
 
-A Django web application for managing a local farmers market: the **producers** (farms, dairies, bakeries, fisheries) who sell there, the **products** they offer, and the **market days** they attend.
+My project for the SoftUni Django Basics regular exam.
 
-Built as the Regular Exam project for the SoftUni **Django Basics** course.
+It's a small web app for running a local farmers market. You can keep track of the producers (farms, bakeries, dairies and so on), the products they sell, and the market days they take part in.
 
----
+## What you can do
 
-## Table of Contents
+- Add, view, edit and delete **producers**. A producer's page lists all of their products.
+- Add, view, edit and delete **products**. Each product can belong to a producer and has a category, price, quantity, unit and an optional expiry date and image.
+- Add, view, edit and delete **market days**, and choose which producers attend each one.
+- Search producers and products by name, and market days by location.
+- See totals, the latest products and the upcoming market days on the home page.
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Environment Variables & Credentials](#environment-variables--credentials)
-- [Project Structure](#project-structure)
-- [Data Model](#data-model)
-- [Pages & URLs](#pages--urls)
-- [Custom 404 Page](#custom-404-page)
-- [Optional Demo Data](#optional-demo-data)
+## Setup
 
----
-
-## Features
-
-- **Producers**: full CRUD. You can list, search by name, view details (including the producer's products), create, update and delete (with a confirmation step).
-- **Products**: full CRUD. Each product belongs to a producer and has a category, unit, price, stock quantity, an optional expiry date and an image.
-- **Market Days**: schedule market days with a location, a market type and opening hours, and choose which producers attend (many-to-many).
-- **Home dashboard**: live counts of products, producers and market days, plus the latest products and upcoming market days.
-- **Search**: search producers and products by name, and market days by location.
-- **Image uploads** for producers and products.
-- **Responsive UI** built with Bootstrap 5, Font Awesome and a custom stylesheet.
-- **Shared layout**: a base template plus reusable partials (header, navigation, footer, form card).
-
-## Tech Stack
-
-| Layer      | Technology                                   |
-|------------|----------------------------------------------|
-| Language   | Python 3.12                                  |
-| Framework  | Django 6.1                                   |
-| Database   | SQLite (default, no setup needed)            |
-| Forms      | django-crispy-forms + crispy-bootstrap5      |
-| Countries  | django-countries                             |
-| Images     | Pillow                                       |
-| Front-end  | Bootstrap 5.3, Font Awesome 6 (CDN)          |
-
-## Getting Started
-
-### Prerequisites
-
-- Python **3.12+**
-- Git
-
-### Installation
+You need Python 3.12 or newer.
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/DBV70/FarmersMarket.git
 cd FarmersMarket
 
-# 2. Create and activate a virtual environment
 python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS / Linux
-source .venv/bin/activate
+.venv\Scripts\activate        # Windows
+source .venv/bin/activate     # macOS / Linux
 
-# 3. Install dependencies
 pip install -r requirements.txt
-
-# 4. Apply database migrations (creates db.sqlite3)
 python manage.py migrate
-
-# 5. Start the development server
 python manage.py runserver
 ```
 
-Open **http://127.0.0.1:8000/** in your browser.
+Then open http://127.0.0.1:8000/.
 
-The application starts with an **empty database**. Every object can be created through the UI:
+The database starts empty and everything can be created from the site. The easiest order is:
 
-1. **Producers → Add Producer**: create at least one producer.
-2. **Products → Add Product**: create products and assign them to a producer.
-3. **Market Days → Add Market Day**: schedule a market day and select the attending producers.
+1. Producers → Add Producer
+2. Products → Add Product (pick a producer)
+3. Markets → Add Market Day (pick the attending producers)
 
-## Environment Variables & Credentials
+You don't need any environment variables, accounts or passwords. The app uses SQLite and the default settings in `FarmersMarket/settings.py`. There's no login, and you don't need the admin panel.
 
-**No environment variables or credentials are required** to run the project locally.
+## Apps
 
-- The project uses Django's default development settings (`DEBUG = True`, SQLite database, development `SECRET_KEY` in `FarmersMarket/settings.py`).
-- No login is needed. Authentication and user management are intentionally out of scope for this project.
-- The Django admin panel is **not** needed to use the application.
+- `common`: the home page, the search form and the custom template filters
+- `producers`: the Producer model and its pages
+- `products`: the Product model and its pages
+- `markets`: the MarketDay model and its pages
 
-## Project Structure
+## Models
 
-```
-FarmersMarket/
-├── manage.py
-├── requirements.txt
-├── FarmersMarket/            # Project package (settings, root URLs, WSGI/ASGI)
-│   ├── settings.py
-│   ├── urls.py
-│   ├── common/               # Home page, shared forms (search), management commands
-│   ├── producers/            # Producer model, forms, CRUD views
-│   ├── products/             # Product model, forms, CRUD views
-│   └── markets/              # MarketDay model, forms, views
-├── templates/
-│   ├── shared/               # base.html + partials: header, nav, footer, form-card
-│   ├── common/               # home page
-│   ├── producers/            # list, detail, add, update, confirm delete
-│   ├── products/             # list, detail, add, update, confirm delete
-│   └── markets/              # list, detail, add, update, confirm delete
-├── static/
-│   ├── css/styles.css        # Custom theme
-│   └── images/
-└── media/                    # Uploaded images (created at runtime, git-ignored)
-```
+- **Producer**: name, address, country, description, contact person, email, phone, website, image
+- **Product**: name, description, category, price, quantity, unit, expiry date, image, and producer (many-to-one)
+- **MarketDay**: date, location, market type, description, opening and closing time, and producers (many-to-many)
 
-### App responsibilities
+If you delete a producer, their products are deleted too. Deleting a market day only removes the links to its producers.
 
-| App         | Responsibility                                                              |
-|-------------|------------------------------------------------------------------------------|
-| `common`    | Landing page / dashboard, reusable forms (search), demo-data command         |
-| `producers` | Managing farms and producers                                                 |
-| `products`  | Managing the product catalog and linking products to producers               |
-| `markets`   | Scheduling market days and assigning attending producers                     |
+## Forms and validation
 
-## Data Model
+- All forms have custom labels, placeholders and help texts. The producer and market day forms also have custom error messages.
+- Market days are validated in the model:
+  - the market must open between 08:00 and 12:00 and close by 19:00
+  - it must open before it closes
+  - a new market day can't be in the past
+- A product's price must be at least 0.01 and its quantity can't be negative. Producer name, email and website must be unique.
+- When you edit a market day, the date and market type are disabled, so they can't be changed.
+- Every delete goes through a confirmation page. It shows a short read-only summary of the object. Unneeded fields are left out of that form.
 
-```
-Producer 1 ──────< * Product          (many-to-one: Product.producer → Producer)
-Producer * >────< * MarketDay         (many-to-many: MarketDay.producers ↔ Producer.market_days)
-```
+## Templates
 
-| Model       | Key fields                                                                                   |
-|-------------|----------------------------------------------------------------------------------------------|
-| `Producer`  | name (unique), address, country, description, contact, email (unique), phone, website (unique), image |
-| `Product`   | name, description, category, price, quantity, unit, expiry date, image, **producer (FK)**     |
-| `MarketDay` | date, location, market type, description, opening / closing time, **producers (M2M)**         |
+- Every page extends `shared/base.html`, which includes the header, navigation bar and footer partials. All add and edit pages share `shared/form-card.html`.
+- The custom filters are in `common/templatetags/market_filters.py`:
+  - `expiry_status` shows "Expires in 5 days", "Expires today" or "Expired"
+  - `stock_level` shows "In stock", "Low stock" or "Out of stock"
+- The styling uses Bootstrap 5, Font Awesome and my own `static/css/styles.css`.
 
-- Deleting a **producer** also deletes their products (`CASCADE`).
-- Deleting a **market day** only removes the producer links. The producers themselves are kept.
+## Custom 404 page
 
-## Pages & URLs
+Django only shows a custom 404 page when `DEBUG` is off. To see it:
 
-| Page                     | URL                          |
-|--------------------------|------------------------------|
-| Home                     | `/`                          |
-| All products             | `/products/`                 |
-| Product details          | `/products/<id>/`            |
-| Add product              | `/products/add/`             |
-| Update product           | `/products/<id>/update/`     |
-| Delete product (confirm) | `/products/<id>/delete/`     |
-| All producers            | `/producers/`                |
-| Producer details         | `/producers/<id>/`           |
-| Add producer             | `/producers/add/`            |
-| Update producer          | `/producers/<id>/update/`    |
-| Delete producer (confirm)| `/producers/<id>/delete/`    |
-| All market days          | `/markets/`                  |
-| Market day details       | `/markets/<id>/`             |
-| Add market day           | `/markets/add/`              |
-| Update market day        | `/markets/<id>/update/`      |
-| Delete market day (confirm) | `/markets/<id>/delete/`   |
+1. Set `DEBUG = False` in `FarmersMarket/settings.py`.
+2. Run `python manage.py runserver --insecure`. The `--insecure` flag keeps the CSS loading.
+3. Open a URL that doesn't exist, for example http://127.0.0.1:8000/abc/.
 
-Every page can be reached from the navigation bar, the footer, or links on other pages.
+## Demo data (optional)
 
-## Custom 404 Page
-
-Django only renders the custom `404.html` template when `DEBUG = False`. To see it locally:
-
-1. In `FarmersMarket/settings.py`, set `DEBUG = False` (keep `ALLOWED_HOSTS = ['*']`).
-2. Run `python manage.py runserver --insecure` (`--insecure` keeps static files served while `DEBUG` is off).
-3. Open any URL that does not exist, e.g. http://127.0.0.1:8000/does-not-exist/.
-
-## Optional Demo Data
-
-The application is fully usable with an empty database. If you want sample data for a quick demo, you can run:
+You don't need this, because the app works with an empty database. If you want some sample data to click around with:
 
 ```bash
 python manage.py seed_market_data
 ```
-
-This step is **optional** and not required for evaluation.

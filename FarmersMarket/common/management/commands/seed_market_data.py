@@ -9,7 +9,6 @@ from FarmersMarket.markets.models import MarketDay
 from FarmersMarket.producers.models import Producer
 from FarmersMarket.products.models import Product
 
-
 class Command(BaseCommand):
     help = "Seed market data with meaningful records."
 
@@ -106,8 +105,10 @@ class Command(BaseCommand):
 
         for i in range(MarketDay.objects.count(), 20):
             event_date = date.today() + timedelta(days=i)
-            open_dt = timezone.make_aware(datetime.combine(event_date, time(8 + (i % 3), 0)))
-            close_dt = timezone.make_aware(datetime.combine(event_date, time(16 + (i % 3), 0)))
+            open_dt = time(8 + (i % 3), 0)
+            close_dt = time(16 + (i % 3), 0)
+            # open_dt = timezone.make_aware(datetime.combine(event_date, time(8 + (i % 3), 0)))
+            # close_dt = timezone.make_aware(datetime.combine(event_date, time(16 + (i % 3), 0)))
 
             market_day = MarketDay.objects.create(
                 date=event_date,

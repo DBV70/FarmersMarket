@@ -1,4 +1,5 @@
 {% extends 'shared/base.html' %}
+{% load crispy_forms_filters %}
 {% block title %}Delete Market Day | Farmers Market{% endblock %}
 
 {% block content %}
@@ -9,6 +10,7 @@
     </div>
     <form method="post" class="fm-form-body">
         {% csrf_token %}
+        {{ form|crispy }}
         <p class="fs-5 mb-2">Are you sure you want to delete the market day in <strong>{{ object.location }}</strong> on <strong>{{ object.date|date:"F d, Y" }}</strong>?</p>
         <p class="text-muted mb-4">{{ object.get_market_type_display }} &middot; {{ object.producers.count }} producer{{ object.producers.count|pluralize }} attending</p>
         <div class="d-flex justify-content-between gap-2">

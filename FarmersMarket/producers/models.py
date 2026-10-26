@@ -10,7 +10,7 @@ class Producer(models.Model):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
     website = models.URLField(unique=True)
-    image = models.ImageField(upload_to='media/producers/', blank=True, null=True)
+    image = models.ImageField(upload_to='producers/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

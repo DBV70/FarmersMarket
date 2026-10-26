@@ -1,4 +1,5 @@
 {% extends 'shared/base.html' %}
+{% load market_filters %}
 {% block title %}{{ product.name }} | Farmers Market{% endblock %}
 
 {% block content %}
@@ -40,7 +41,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="fm-card fm-info">
-                    <p class="fm-info-label"><i class="fa-regular fa-hourglass-half me-1"></i> Expires</p>
+                    <p class="fm-info-label"><i class="fa-regular fa-hourglass-half me-1"></i> {{ product.expiry_date|expiry_status }}</p>
                     <p class="fm-info-value">{{ product.expiry_date|date:"F d, Y"|default:"Not set" }}</p>
                 </div>
             </div>
