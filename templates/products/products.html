@@ -14,11 +14,32 @@
 </div>
 
 <form class="fm-search mb-4" method="get">
-    <div class="input-group input-group-lg">
-        <input type="text" class="form-control" placeholder="Search product..." name="search_text" value="{{ request.GET.search_text }}">
-        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</button>
+    <div class="row g-3">
+        <div class="col-md-8">
+            <div class="input-group input-group-lg">
+                <input type="text" class="form-control" placeholder="Search product..." name="search_text" value="{{ request.GET.search_text }}">
+                <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</button>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <select name="sort_by" class="form-select form-select-lg fm-pill-select" aria-label="Sort by" onchange="this.form.submit()">
+                <option value="">Sort by: default</option>
+                {% for value, label in search_form.fields.sort_by.choices %}
+                    {% if value %}
+                        <option value="{{ value }}" {% if request.GET.sort_by == value %}selected{% endif %}>{{ label }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
     </div>
+
+    {% if search_form.errors %}
+        <p class="text-danger small mt-2 mb-0">Some filter values were not valid and were ignored.</p>
+    {% endif %}
 </form>
+
+<p class="text-muted small mb-3">{{ product_list|length }} product{{ product_list|length|pluralize }} found</p>
 
 {% if product_list %}
 <div class="row g-4">

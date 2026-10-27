@@ -9,7 +9,8 @@ It's a small web app for running a local farmers market. You can keep track of t
 - Add, view, edit and delete **producers**. A producer's page lists all of their products.
 - Add, view, edit and delete **products**. Each product can belong to a producer and has a category, price, quantity, unit and an optional expiry date and image.
 - Add, view, edit and delete **market days**, and choose which producers attend each one.
-- Search producers and products by name, and market days by location.
+- Search producers and products by name, and markets by location.
+- Products can also be sorted by name, price or date added.
 - See totals, the latest products and the upcoming market days on the home page.
 
 ## Setup
@@ -83,8 +84,14 @@ Django only shows a custom 404 page when `DEBUG` is off. To see it:
 
 ## Demo data (optional)
 
-You don't need this, because the app works with an empty database. If you want some sample data to click around with:
+If you want some sample data to click around with run `python manage.py seed_market_data` in the console.
 
 ```bash
 python manage.py seed_market_data
 ```
+## AI content
+
+- HTML templates partly contain AI-generated content.
+- CSS contains AI-generated content.
+- README.md partly contains AI-generated content.
+- Function used for filling data in the database `seed_market_data.py` contains AI-generated content.

@@ -1,4 +1,5 @@
 from django import forms
+from FarmersMarket.common.forms import SearchForm
 from FarmersMarket.products.models import Product
 
 class ProductForm(forms.ModelForm):
@@ -31,15 +32,22 @@ class ProductForm(forms.ModelForm):
         }
 
         help_texts = {
-            'name': 'Enter the name of the product.',
             'price': 'Enter the price of the product.',
             'quantity': 'Enter the quantity of the product.',
             'image': 'Upload an image of the product.',
-            'description': 'Provide a detailed description of the product.',
             'category': 'Select the category of the product.',
             'unit': 'Select the unit of measurement.',
             'producer': 'Select the producer of the product.',
             'expiry_date': 'Enter the expiry date of the product.',
+        }
+
+        error_messages = {
+            'name': {'required': 'Please enter the product name.'},
+            'price': {'required': 'Please enter the product price.'},
+            'quantity': {'required': 'Please enter the product quantity.'},
+            'category': {'required': 'Please select a product category.'},
+            'unit': {'required': 'Please select a unit of measurement.'},
+            'producer': {'required': 'Please select a producer.'},
         }
 
 class ProductCreateForm(ProductForm):
@@ -57,3 +65,14 @@ class ProductDeleteForm(ProductForm):
 
     class Meta(ProductForm.Meta):
         exclude = ['price', 'quantity', 'category', 'unit', 'producer', 'expiry_date', 'image']
+
+class ProductSearchForm(SearchForm):
+    SORT_CHOICES = [
+        ('name', 'Name (A-Z)'),
+        ('-name', 'Name (Z-A)'),
+        ('price', 'Price: low to high'),
+        ('-price', 'Price: high to low'),
+        ('-created_at', 'Newest first'),
+        ('', '---')
+    ]
+    sort_by = forms.ChoiceField(choices=SORT_CHOICES, label='Sort by:', required=False)

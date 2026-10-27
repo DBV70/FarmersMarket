@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_countries',
     'crispy_forms',
-    'crispy_bulma',
     'crispy_bootstrap5'
 
 ] + PROJECT_APPS
@@ -93,7 +92,7 @@ DATABASES = {
 #         "ENGINE": "django.db.backends.postgresql",
 #         "NAME": "farmers_market",
 #         "USER": "postgres",
-#         "PASSWORD": "Doncho1970!",
+#         "PASSWORD": "********",
 #         "HOST": "127.0.0.1",
 #         "PORT": "5432",
 #     }
@@ -140,13 +139,13 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
-CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma", "bootstrap5")
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+# MAILERS = {
+#     'default': {
+#         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+#     },
+# }

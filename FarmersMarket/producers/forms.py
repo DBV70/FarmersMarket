@@ -30,14 +30,9 @@ class ProducerForm(forms.ModelForm):
         }
 
         help_texts = {
-            'name': 'Enter the name of the producer.',
-            'address': 'Enter the address of the producer.',
             'country': 'Select the country where the producer is located.',
-            'description': 'Provide a brief description of the producer.',
             'contact': 'Enter the contact person for the producer.',
-            'email': 'Enter the email address of the producer.',
-            'phone': 'Enter the phone number of the producer.',
-            'website': 'Enter the website of the producer.',
+            'image': 'Upload an image of the producer.'
         }
 
         error_messages = {
@@ -67,4 +62,4 @@ class ProducerDeleteForm(ProducerForm):
             self.fields['country'].disabled = True
 
     class Meta(ProducerForm.Meta):
-        exclude = ['description', 'contact', 'email', 'phone', 'website']
+        exclude = ['description', 'contact', 'email', 'phone', 'website', 'image']

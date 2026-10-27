@@ -1,7 +1,6 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
-from FarmersMarket.products.forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm
-from FarmersMarket.common.forms import SearchForm
+from FarmersMarket.products.forms import ProductCreateForm, ProductUpdateForm, ProductDeleteForm, ProductSearchForm
 from FarmersMarket.products.models import Product
 
 class ProductCreateView(CreateView):
@@ -36,18 +35,23 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         queryset = Product.objects.select_related('producer').all()
-        self.search_form = SearchForm(self.request.GET)
+        self.search_form = ProductSearchForm(self.request.GET)
 
         if self.search_form.is_valid():
+            order_by = self.search_form.cleaned_data.get('sort_by')
             search_text = self.search_form.cleaned_data.get('search_text')
+
             if search_text:
                 queryset = queryset.filter(name__icontains=search_text)
+
+            if order_by:
+                queryset = queryset.order_by(order_by)
 
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['search_form'] = getattr(self, 'search_form', SearchForm())
+        context['search_form'] = getattr(self, 'search_form', ProductSearchForm())
         return context
 
 

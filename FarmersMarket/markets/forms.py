@@ -28,7 +28,6 @@ class MarketForm(forms.ModelForm):
         help_texts = {
             'date': 'Select the date of the market.',
             'market_type': 'Select the type of market.',
-            'location': 'Enter the location of the market.',
             'market_open': 'Select the opening time of the market.',
             'market_close': 'Select the closing time of the market.',
             'producers': 'Select the producers associated with the market.',

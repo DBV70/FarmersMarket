@@ -368,6 +368,20 @@ a.fm-list-item:hover {
     border-radius: 0 999px 999px 0;
 }
 
+/* Category / sort dropdowns next to the search box */
+.fm-pill-select {
+    border-radius: 999px;
+    padding-left: 1.25rem;
+    border-color: var(--fm-border);
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.fm-pill-select:focus {
+    border-color: var(--fm-green);
+    box-shadow: 0 0 0 .2rem var(--fm-green-soft);
+}
+
 /* ---------- Forms ---------- */
 
 .fm-form-card {
